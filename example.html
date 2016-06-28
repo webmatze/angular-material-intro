@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+  <link rel="stylesheet" href="dist/angular-material-intro.css">
+  <link rel="stylesheet" href="./bower/angular-material/angular-material.css">
+  <script src="./bower/angular/angular.js"></script>
+  <script src="./bower/angular-material/angular-material.js"></script>
+  <script src="./bower/angular-animate/angular-animate.js"></script>
+  <script src="./bower/angular-aria/angular-aria.js"></script>
+  <script src="./bower/angular-messages/angular-messages.js"></script>
+  <script src="./dist/angular-material-intro.js"></script>
+  <script>
+    angular.module("app", ['ngMaterial','angular-material-intro'])
+      .run(function($rootScope) {
+          $rootScope.something = 'value'
+      }).controller('TesterCtrl', function($q) {
+        this.introOptions = {
+          steps: [
+            $q.when({
+              intro: "Willkommen in Garooda"
+            }),
+            $q.when({
+              intro: "Hier können Sie uns liken."
+            }).then(function (data) {
+              data.element = angular.element(document.querySelector('#favorite'))
+              return data
+            }),
+            $q.when({
+              intro: "Hier rufen Sie das Menü auf."
+            }).then(function (data) {
+              data.element = angular.element(document.querySelector('#menu'))
+              return data
+            }),
+          ]
+        }
+      });
+  </script>
+</head>
+<body  ng-controller="TesterCtrl as $ctrl">
+  <md-content md-intro md-intro-options="$ctrl.introOptions">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <a class="md-button" href="#" id="favorite">Favorite</a>
+        <a class="md-button" href="#" id="menu">Menu</a>
+      </div>
+    </md-toolbar>
+  </md-content>
+</body>
+</html>

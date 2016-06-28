@@ -1,0 +1,36 @@
+{
+  "name": "angular-material-intro",
+  "version": "0.1.0",
+  "description": "A simple Intro.js like script for Angular and MaterialDesign",
+  "keywords": ["angular","material","intro"],
+  "authors": [
+    {
+      "name": "Mathias Karstädt",
+      "email": "mathias.karstaedt@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webmatze/angular-material-intro.git"
+  },
+  "license": "MIT",
+  "main": [
+    "dist/angular-material-intro.js",
+    "dist/angular-material-intro.css"
+    ],
+  "ignore": [
+    "*.*",
+    "bower",
+    "modules",
+    "node_modules",
+    "src",
+    "test"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "angular-mocks": ">=1.2.0",
+    "angular-scenario": ">=1.2.0",
+    "angular": ">=1.2.0",
+    "angular-material": "1.0.9"
+  }
+}

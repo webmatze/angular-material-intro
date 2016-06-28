@@ -1,0 +1,36 @@
+{
+  "generator-angular-package": {
+    "props": {
+      "moduleName": "angular-material-intro",
+      "description": "A simple Intro.js like script for Angular and MaterialDesign",
+      "gitUrl": "https://github.com/webmatze/angular-material-intro.git",
+      "keywords": "[\"angular\",\"material\",\"intro\"]",
+      "license": "MIT",
+      "author": {
+        "name": "Mathias Karstädt",
+        "email": "mathias.karstaedt@gmail.com"
+      },
+      "yourModule": {
+        "original": "angular-material-intro",
+        "camelized": "angularMaterialIntro",
+        "dasherized": "angular-material-intro",
+        "slugified": "angular-material-intro",
+        "parts": [
+          "angular",
+          "material",
+          "intro"
+        ]
+      },
+      "includeModuleDirectives": true,
+      "includeModuleFilters": false,
+      "includeModuleServices": true,
+      "includeModuleControllers": true,
+      "includeAngularModuleResource": false,
+      "includeAngularModuleCookies": false,
+      "includeAngularModuleSanitize": false,
+      "moduleDirectory": "modules/angular-material-intro",
+      "moduleUnitTestDirectory": "test/unit/angular-material-intro",
+      "moduleUnitE2eDirectory": "test/e2e/angular-material-intro"
+    }
+  }
+}
