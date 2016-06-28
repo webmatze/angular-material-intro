@@ -18,7 +18,7 @@
       return $scope.mdIntroOptions.steps[currentStep]
     }
     $ctrl.showStep = function (step) {
-      return mdIntroPanel.create(step)
+      return mdIntroPanel(step)
     }
   }
   mdIntroController.$inject = ["$scope", "mdIntroPanel"]
