@@ -13,24 +13,24 @@
     angular.module("app", ['ngMaterial','angular-material-intro'])
       .run(function($rootScope) {
           $rootScope.something = 'value'
-      }).controller('TesterCtrl', function($q) {
+      }).controller('TesterCtrl', function($q, mdIntroStep) {
         this.introOptions = {
           steps: [
-            $q.when({
+            mdIntroStep({
               intro: "Willkommen in Garooda"
             }),
-            $q.when({
+            mdIntroStep({
               intro: "Hier können Sie uns liken."
-            }).then(function (data) {
+            },function (data) {
               data.element = angular.element(document.querySelector('#favorite'))
               return data
             }),
-            $q.when({
+            mdIntroStep({
               intro: "Hier rufen Sie das Menü auf."
-            }).then(function (data) {
+            },function (data) {
               data.element = angular.element(document.querySelector('#menu'))
               return data
-            }),
+            })
           ]
         }
       });

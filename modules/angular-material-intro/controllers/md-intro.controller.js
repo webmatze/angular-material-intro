@@ -4,9 +4,9 @@
     var $ctrl = this
     var currentStep = 0
     $ctrl.step = function () {
-      var step = this.nextStep()
-      if (step) {
-        step.then(function (data) {
+      var nextStep = this.nextStep()
+      if (nextStep) {
+        nextStep().then(function (data) {
           return $ctrl.showStep(data)
         }).finally(function () {
           currentStep++

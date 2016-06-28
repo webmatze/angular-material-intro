@@ -31,9 +31,9 @@
     var $ctrl = this
     var currentStep = 0
     $ctrl.step = function () {
-      var step = this.nextStep()
-      if (step) {
-        step.then(function (data) {
+      var nextStep = this.nextStep()
+      if (nextStep) {
+        nextStep().then(function (data) {
           return $ctrl.showStep(data)
         }).finally(function () {
           currentStep++
@@ -113,5 +113,24 @@
   mdIntroPanel.$inject = ["$mdPanel", "$q"]
   
   angular.module('angular-material-intro.services').service('mdIntroPanel', mdIntroPanel)
+
+})(angular);
+
+(function (angular) {
+
+  function mdIntroStep ($q) {
+    return function (config, callback) {
+      return function () {
+        var promise = $q.when(config)
+        if (callback) {
+          promise = promise.then(callback)
+        }
+        return promise
+      }
+    }
+  }
+  mdIntroStep.$inject = ["$q"]
+
+  angular.module('angular-material-intro.services').service('mdIntroStep', mdIntroStep)
 
 })(angular);
