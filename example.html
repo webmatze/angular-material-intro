@@ -14,6 +14,7 @@
       .run(function($rootScope) {
           $rootScope.something = 'value'
       }).controller('TesterCtrl', function($q, mdIntroStep) {
+        this.addButtonOpen = false
         this.introOptions = {
           steps: [
             mdIntroStep({
@@ -36,14 +37,35 @@
       });
   </script>
 </head>
-<body  ng-controller="TesterCtrl as $ctrl">
-  <md-content md-intro md-intro-options="$ctrl.introOptions">
+<body layout="column" ng-controller="TesterCtrl as test">
+  <md-content layout="column" flex md-intro md-intro-options="test.introOptions">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <a class="md-button" href="#" id="favorite">Favorite</a>
         <a class="md-button" href="#" id="menu">Menu</a>
       </div>
     </md-toolbar>
+    <md-content flex>
+      {{test.addButtonOpen}}
+      <md-fab-speed-dial class="md-fab-bottom-right md-scale" md-open="test.addButtonOpen" md-direction="up" ng-mouseenter="test.addButtonOpen=true" ng-mouseleave="test.addButtonOpen=false">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            +
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <md-button aria-label="Twitter" class="md-fab md-raised md-mini">
+            1
+          </md-button>
+          <md-button aria-label="Facebook" class="md-fab md-raised md-mini">
+            2
+          </md-button>
+          <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini">
+            3
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </md-content>
   </md-content>
 </body>
 </html>
