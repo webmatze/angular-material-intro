@@ -6,8 +6,10 @@
         var position = $mdPanel.newPanelPosition()
         if (step.element) {
           position = position.relativeTo(step.element)
-          .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.BELOW)
-          .addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_START, $mdPanel.yPosition.BELOW)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_END, $mdPanel.yPosition.BELOW)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_START, $mdPanel.yPosition.ABOVE)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_END, $mdPanel.yPosition.ABOVE)
           //.withOffsetY('10px');
         } else {
           position = position.absolute().center()
