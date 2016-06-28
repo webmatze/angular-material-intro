@@ -18,16 +18,16 @@
         this.introOptions = {
           steps: [
             mdIntroStep({
-              intro: "Willkommen in Garooda"
+              intro: "Welcome to Angular Material Intro"
             }),
             mdIntroStep({
-              intro: "Hier können Sie uns liken."
+              intro: "Step 1: press this button."
             },function (data) {
               data.element = angular.element(document.querySelector('#favorite'))
               return data
             }),
             mdIntroStep({
-              intro: "Hier rufen Sie das Menü auf."
+              intro: "Step 2: click this link."
             },function (data) {
               data.element = angular.element(document.querySelector('#menu'))
               return data
@@ -41,15 +41,13 @@
   <md-content layout="column" flex md-intro md-intro-options="test.introOptions">
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <a class="md-button" href="#" id="favorite">Favorite</a>
         <a class="md-button" href="#" id="menu">Menu</a>
       </div>
     </md-toolbar>
     <md-content flex>
-      {{test.addButtonOpen}}
       <md-fab-speed-dial class="md-fab-bottom-right md-scale" md-open="test.addButtonOpen" md-direction="up" ng-mouseenter="test.addButtonOpen=true" ng-mouseleave="test.addButtonOpen=false">
         <md-fab-trigger>
-          <md-button aria-label="menu" class="md-fab md-warn">
+          <md-button aria-label="menu" class="md-fab md-warn" id="favorite">
             +
           </md-button>
         </md-fab-trigger>
