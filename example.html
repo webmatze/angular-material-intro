@@ -19,6 +19,12 @@
           steps: [
             mdIntroStep({
               intro: "Welcome to Angular Material Intro"
+            }, function (data) {
+              console.log('before step 1')
+              return data
+            }, function (data) {
+              console.log('after step 1')
+              return data
             }),
             mdIntroStep({
               intro: "Step 1: press this button."

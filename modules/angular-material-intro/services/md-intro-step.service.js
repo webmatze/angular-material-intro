@@ -1,13 +1,15 @@
 (function (angular) {
 
   function mdIntroStep ($q) {
-    return function (config, callback) {
+    return function (config, beforeCallback, afterCallback) {
       return function () {
-        var promise = $q.when(config)
-        if (callback) {
-          promise = promise.then(callback)
+        if (beforeCallback) {
+          config.onBeforeStep = beforeCallback
         }
-        return promise
+        if (afterCallback) {
+          config.onAfterStep = afterCallback
+        }
+        return $q.when(config)
       }
     }
   }

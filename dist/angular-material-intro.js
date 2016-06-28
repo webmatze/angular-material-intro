@@ -27,14 +27,20 @@
 
 (function (angular) {
 
-  function mdIntroController($scope, mdIntroPanel) {
+  function mdIntroController($scope, $q, mdIntroPanel) {
     var $ctrl = this
     var currentStep = 0
     $ctrl.step = function () {
       var nextStep = this.nextStep()
       if (nextStep) {
         nextStep().then(function (data) {
-          return $ctrl.showStep(data)
+          return data.onBeforeStep ? $q.when(data.onBeforeStep(data)) : data
+        }).then(function (data) {
+          return $ctrl.showStep(data).then(function (mdPanelRef) {
+            return data
+          })
+        }).then(function (data) {
+          return data.onAfterStep ? $q.when(data.onAfterStep(data)) : data
         }).finally(function () {
           currentStep++
           $ctrl.step()
@@ -48,29 +54,9 @@
       return mdIntroPanel(step)
     }
   }
-  mdIntroController.$inject = ["$scope", "mdIntroPanel"]
+  mdIntroController.$inject = ["$scope", "$q", "mdIntroPanel"]
 
   angular.module('angular-material-intro.controllers').controller('mdIntroController', mdIntroController);
-
-})(angular);
-
-(function (angular) {
-
-  function mdIntroDirective ($timeout) {
-    return {
-      controller: "mdIntroController",
-      controllerAs: '$ctrl',
-      scope: {
-        mdIntroOptions: '<'
-      },
-      link: function (scope, element, attrs, controller) {
-        $timeout(controller.step.bind(controller), 1000)
-      }
-    }
-  }
-  mdIntroDirective.$inject = ["$timeout"]
-
-  angular.module('angular-material-intro.directives').directive('mdIntro', mdIntroDirective);
 
 })(angular);
 
@@ -119,18 +105,40 @@
 (function (angular) {
 
   function mdIntroStep ($q) {
-    return function (config, callback) {
+    return function (config, beforeCallback, afterCallback) {
       return function () {
-        var promise = $q.when(config)
-        if (callback) {
-          promise = promise.then(callback)
+        if (beforeCallback) {
+          config.onBeforeStep = beforeCallback
         }
-        return promise
+        if (afterCallback) {
+          config.onAfterStep = afterCallback
+        }
+        return $q.when(config)
       }
     }
   }
   mdIntroStep.$inject = ["$q"]
 
   angular.module('angular-material-intro.services').service('mdIntroStep', mdIntroStep)
+
+})(angular);
+
+(function (angular) {
+
+  function mdIntroDirective ($timeout) {
+    return {
+      controller: "mdIntroController",
+      controllerAs: '$ctrl',
+      scope: {
+        mdIntroOptions: '<'
+      },
+      link: function (scope, element, attrs, controller) {
+        $timeout(controller.step.bind(controller), 1000)
+      }
+    }
+  }
+  mdIntroDirective.$inject = ["$timeout"]
+
+  angular.module('angular-material-intro.directives').directive('mdIntro', mdIntroDirective);
 
 })(angular);
