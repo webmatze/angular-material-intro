@@ -56,14 +56,36 @@
 
 (function (angular) {
 
+  function mdIntroDirective ($timeout) {
+    return {
+      controller: "mdIntroController",
+      controllerAs: '$ctrl',
+      scope: {
+        mdIntroOptions: '<'
+      },
+      link: function (scope, element, attrs, controller) {
+        $timeout(controller.step.bind(controller), 1000)
+      }
+    }
+  }
+  mdIntroDirective.$inject = ["$timeout"]
+
+  angular.module('angular-material-intro.directives').directive('mdIntro', mdIntroDirective);
+
+})(angular);
+
+(function (angular) {
+
   function mdIntroPanel ($mdPanel, $q) {
     return function (step) {
       return $q(function (resolve, reject) {
         var position = $mdPanel.newPanelPosition()
         if (step.element) {
           position = position.relativeTo(step.element)
-          .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.BELOW)
-          .addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_START, $mdPanel.yPosition.BELOW)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_END, $mdPanel.yPosition.BELOW)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_START, $mdPanel.yPosition.ABOVE)
+          .addPanelPosition($mdPanel.xPosition.OFFSET_END, $mdPanel.yPosition.ABOVE)
           //.withOffsetY('10px');
         } else {
           position = position.absolute().center()
@@ -110,25 +132,5 @@
   mdIntroStep.$inject = ["$q"]
 
   angular.module('angular-material-intro.services').service('mdIntroStep', mdIntroStep)
-
-})(angular);
-
-(function (angular) {
-
-  function mdIntroDirective ($timeout) {
-    return {
-      controller: "mdIntroController",
-      controllerAs: '$ctrl',
-      scope: {
-        mdIntroOptions: '<'
-      },
-      link: function (scope, element, attrs, controller) {
-        $timeout(controller.step.bind(controller), 1000)
-      }
-    }
-  }
-  mdIntroDirective.$inject = ["$timeout"]
-
-  angular.module('angular-material-intro.directives').directive('mdIntro', mdIntroDirective);
 
 })(angular);
