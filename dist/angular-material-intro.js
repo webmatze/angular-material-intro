@@ -27,7 +27,7 @@
 
 (function (angular) {
 
-  function mdIntroController($scope, $q, mdIntroPanel) {
+  function mdIntroController($q, mdIntroPanel) {
     var $ctrl = this
     var currentStep = 0
     $ctrl.step = function () {
@@ -41,22 +41,51 @@
           })
         }).then(function (data) {
           return data.onAfterStep ? $q.when(data.onAfterStep(data)) : data
-        }).finally(function () {
+        }).then(function (data) {
           currentStep++
           $ctrl.step()
+        }).catch(function (error) {
+          console.log(error)
+          currentStep = 0
         })
       }
     }
     $ctrl.nextStep = function () {
-      return $scope.mdIntroOptions.steps[currentStep]
+      return $ctrl.mdIntroOptions.steps[currentStep]
     }
     $ctrl.showStep = function (step) {
       return mdIntroPanel(step)
     }
+    if ($ctrl.mdIntroOptions.autorun) {
+      $ctrl.step()
+    }
+    $ctrl.mdIntroMethod = function () {
+      currentStep = 0
+      $ctrl.step()
+    }
+
   }
-  mdIntroController.$inject = ["$scope", "$q", "mdIntroPanel"]
+  mdIntroController.$inject = ["$q", "mdIntroPanel"]
 
   angular.module('angular-material-intro.controllers').controller('mdIntroController', mdIntroController);
+
+})(angular);
+
+(function (angular) {
+
+  function mdIntroDirective ($timeout) {
+    return {
+      controller: "mdIntroController",
+      controllerAs: '$ctrl',
+      bindToController: {
+        mdIntroOptions: '<',
+        mdIntroMethod: '='
+      }
+    }
+  }
+  mdIntroDirective.$inject = ["$timeout"]
+
+  angular.module('angular-material-intro.directives').directive('mdIntro', mdIntroDirective);
 
 })(angular);
 
@@ -78,7 +107,14 @@
         }
         var config = {
           attachTo: angular.element(document.body),
-          template: '<div class="md-intro-panel"><div>' + step.intro + '</div><md-button ng-click="$ctrl.next($event)">Weiter</md-button></div>',
+          template: '<div class="md-intro-panel">'
+            + '<div>' + step.intro + '</div>'
+            + '<md-button ng-click="$ctrl.next($event)" ng-hide="$ctrl.step.hideNextButton">{{$ctrl.nextLabel()}}</md-button>'
+            + '<md-button ng-click="$ctrl.cancel($event)" ng-hide="$ctrl.step.hideCancelButton">{{$ctrl.cancelLabel()}}</md-button>'
+            + '</div>',
+          locals: {
+            step: step
+          },
           clickOutsideToClose: false,
           escapeToClose: false,
           focusOnOpen: true,
@@ -87,6 +123,16 @@
           controller: function (mdPanelRef) {
             this.next = function () {
               mdPanelRef.close()
+            }
+            this.cancel = function () {
+              reject({ reason: 'cancel', step: step})
+              mdPanelRef.close()
+            }
+            this.nextLabel = function () {
+              return this.step.nextLabel || 'Next Step'
+            }
+            this.cancelLabel = function () {
+              return this.step.cancelLabel || 'Cancel'
             }
           },
           controllerAs: '$ctrl',
@@ -120,25 +166,5 @@
   mdIntroStep.$inject = ["$q"]
 
   angular.module('angular-material-intro.services').service('mdIntroStep', mdIntroStep)
-
-})(angular);
-
-(function (angular) {
-
-  function mdIntroDirective ($timeout) {
-    return {
-      controller: "mdIntroController",
-      controllerAs: '$ctrl',
-      scope: {
-        mdIntroOptions: '<'
-      },
-      link: function (scope, element, attrs, controller) {
-        $timeout(controller.step.bind(controller), 1000)
-      }
-    }
-  }
-  mdIntroDirective.$inject = ["$timeout"]
-
-  angular.module('angular-material-intro.directives').directive('mdIntro', mdIntroDirective);
 
 })(angular);
