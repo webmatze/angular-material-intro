@@ -29,7 +29,7 @@
     $ctrl.showStep = function (step) {
       return mdIntroPanel(step)
     }
-    $scope.$watch('$ctrl.mdIntroOptions', function (newVal) {
+    $scope.$watch('$mdIntroCtrl.mdIntroOptions', function (newVal) {
       if (newVal && newVal.autorun) {
         $ctrl.step()
       }

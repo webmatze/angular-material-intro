@@ -3,7 +3,7 @@
   function mdIntroDirective ($timeout) {
     return {
       controller: "mdIntroController",
-      controllerAs: '$ctrl',
+      controllerAs: '$mdIntroCtrl',
       bindToController: {
         mdIntroOptions: '<',
         mdIntroMethod: '='
