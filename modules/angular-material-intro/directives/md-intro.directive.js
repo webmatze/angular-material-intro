@@ -4,11 +4,9 @@
     return {
       controller: "mdIntroController",
       controllerAs: '$ctrl',
-      scope: {
-        mdIntroOptions: '<'
-      },
-      link: function (scope, element, attrs, controller) {
-        $timeout(controller.step.bind(controller), 1000)
+      bindToController: {
+        mdIntroOptions: '<',
+        mdIntroMethod: '='
       }
     }
   }

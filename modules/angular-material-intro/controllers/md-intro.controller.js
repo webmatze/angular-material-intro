@@ -1,6 +1,6 @@
 (function (angular) {
 
-  function mdIntroController($scope, $q, mdIntroPanel) {
+  function mdIntroController($q, mdIntroPanel) {
     var $ctrl = this
     var currentStep = 0
     $ctrl.step = function () {
@@ -14,20 +14,31 @@
           })
         }).then(function (data) {
           return data.onAfterStep ? $q.when(data.onAfterStep(data)) : data
-        }).finally(function () {
+        }).then(function (data) {
           currentStep++
           $ctrl.step()
+        }).catch(function (error) {
+          console.log(error)
+          currentStep = 0
         })
       }
     }
     $ctrl.nextStep = function () {
-      return $scope.mdIntroOptions.steps[currentStep]
+      return $ctrl.mdIntroOptions.steps[currentStep]
     }
     $ctrl.showStep = function (step) {
       return mdIntroPanel(step)
     }
+    if ($ctrl.mdIntroOptions.autorun) {
+      $ctrl.step()
+    }
+    $ctrl.mdIntroMethod = function () {
+      currentStep = 0
+      $ctrl.step()
+    }
+
   }
-  mdIntroController.$inject = ["$scope", "$q", "mdIntroPanel"]
+  mdIntroController.$inject = ["$q", "mdIntroPanel"]
 
   angular.module('angular-material-intro.controllers').controller('mdIntroController', mdIntroController);
 

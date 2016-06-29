@@ -14,8 +14,12 @@
       .run(function($rootScope) {
           $rootScope.something = 'value'
       }).controller('TesterCtrl', function($q, mdIntroStep) {
-        this.addButtonOpen = false
-        this.introOptions = {
+        $ctrl = this
+        $ctrl.addButtonOpen = false
+        $ctrl.introOptions = {
+          autorun: false,
+          nextLabel: 'Next Step',
+          cancelLabel: 'Cancel Tour',
           steps: [
             mdIntroStep({
               intro: "Welcome to Angular Material Intro"
@@ -31,12 +35,14 @@
             },function (data) {
               data.element = angular.element(document.querySelector('#favorite'))
               return data
+            }, function (data) {
+              $ctrl.addButtonOpen = true
+              return data
             }),
             mdIntroStep({
-              intro: "Step 2: click this link."
-            },function (data) {
-              data.element = angular.element(document.querySelector('#menu'))
-              return data
+              intro: "You've reached the end of our tour.",
+              cancelLabel: "Finish Tour",
+              hideNextButton: true
             })
           ]
         }
@@ -44,10 +50,10 @@
   </script>
 </head>
 <body layout="column" ng-controller="TesterCtrl as test">
-  <md-content layout="column" flex md-intro md-intro-options="test.introOptions">
+  <md-content layout="column" flex md-intro md-intro-options="test.introOptions" md-intro-method="test.startTour">
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <a class="md-button" href="#" id="menu">Menu</a>
+        <a class="md-button" href="#" ng-click="test.startTour()">Start Tour</a>
       </div>
     </md-toolbar>
     <md-content flex>

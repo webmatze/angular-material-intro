@@ -16,7 +16,14 @@
         }
         var config = {
           attachTo: angular.element(document.body),
-          template: '<div class="md-intro-panel"><div>' + step.intro + '</div><md-button ng-click="$ctrl.next($event)">Weiter</md-button></div>',
+          template: '<div class="md-intro-panel">'
+            + '<div>' + step.intro + '</div>'
+            + '<md-button ng-click="$ctrl.next($event)" ng-hide="$ctrl.step.hideNextButton">{{$ctrl.nextLabel()}}</md-button>'
+            + '<md-button ng-click="$ctrl.cancel($event)" ng-hide="$ctrl.step.hideCancelButton">{{$ctrl.cancelLabel()}}</md-button>'
+            + '</div>',
+          locals: {
+            step: step
+          },
           clickOutsideToClose: false,
           escapeToClose: false,
           focusOnOpen: true,
@@ -25,6 +32,16 @@
           controller: function (mdPanelRef) {
             this.next = function () {
               mdPanelRef.close()
+            }
+            this.cancel = function () {
+              reject({ reason: 'cancel', step: step})
+              mdPanelRef.close()
+            }
+            this.nextLabel = function () {
+              return this.step.nextLabel || 'Next Step'
+            }
+            this.cancelLabel = function () {
+              return this.step.cancelLabel || 'Cancel'
             }
           },
           controllerAs: '$ctrl',
